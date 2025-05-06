@@ -257,6 +257,7 @@ endif()
 
 if(ARG_INSTALL)
     message("\n~~~~ Actualizing Install step ~~~~\n")
+    message("cwd ${BUILD_PATH}")
     execute_process(
         COMMAND cmake --install . --config "${BUILD_TYPE}"
         WORKING_DIRECTORY "${BUILD_PATH}"
