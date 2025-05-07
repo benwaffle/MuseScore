@@ -60,4 +60,24 @@ install(CODE "
     file(GLOB ZIPFOUNDATION_LIBS \"${CMAKE_CURRENT_SOURCE_DIR}/.build/debug/libZIPFoundation*.dylib\")
     file(COPY \${ZIPFOUNDATION_LIBS}
          DESTINATION \"${CMAKE_INSTALL_PREFIX}/mscore.app/Contents/PlugIns/MuseScoreQLPreviewProvider.appex/Contents/Frameworks\")
+
+    # Ad-hoc code sign the QuickLook extension, for dev
+    execute_process(
+        COMMAND codesign --force --sign - --timestamp=none --entitlements \"${CMAKE_CURRENT_SOURCE_DIR}/mscz-ql-plugin/mscz_ql_plugin.entitlements\"
+                \"${CMAKE_INSTALL_PREFIX}/mscore.app/Contents/PlugIns/MuseScoreQLPreviewProvider.appex\"
+        RESULT_VARIABLE CODESIGN_RESULT
+    )
+    if(NOT CODESIGN_RESULT EQUAL 0)
+        message(FATAL_ERROR \"Failed to ad-hoc sign QuickLook extension\")
+    endif()
+
+    # Ad-hoc code sign the main app, for dev
+    execute_process(
+        COMMAND codesign --force --sign - --timestamp=none
+                \"${CMAKE_INSTALL_PREFIX}/mscore.app\"
+        RESULT_VARIABLE CODESIGN_RESULT
+    )
+    if(NOT CODESIGN_RESULT EQUAL 0)
+        message(FATAL_ERROR \"Failed to ad-hoc sign main app\")
+    endif()
 ")

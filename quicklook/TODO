@@ -1,5 +1,4 @@
-- setup codesigning in dev with entitlements, and also for prod
-- does the QL plugin load if you just open the app in dev? yes
+- codesign in prod
 
 qlmanage -m is a lie
 pluginkit is where it's at
