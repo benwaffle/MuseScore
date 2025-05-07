@@ -27,7 +27,7 @@ add_custom_target(swift_package_build
     COMMAND swift package resolve
     COMMAND swift build
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    COMMENT "Building Swift Package Manager dependencies"
+    COMMENT "Building swift code"
 )
 
 # QuickLook Preview Provider Extension
@@ -37,29 +37,28 @@ add_custom_target(MuseScoreQLPreviewProvider ALL
 )
 
 # Thumbnail Provider Extension
-# add_custom_target(MuseScoreThumbnailProvider ALL
-    # DEPENDS swift_package_build
-    # COMMENT "Installing MuseScoreThumbnailProvider.appex"
-# )
+add_custom_target(MuseScoreThumbnailProvider ALL
+    DEPENDS swift_package_build
+    COMMENT "Installing MuseScoreThumbnailProvider.appex"
+)
 
 # Install targets
 install(CODE "
     # Create directory structure
     file(MAKE_DIRECTORY \"${CMAKE_INSTALL_PREFIX}/mscore.app/Contents/PlugIns/MuseScoreQLPreviewProvider.appex/Contents/MacOS\")
-    file(MAKE_DIRECTORY \"${CMAKE_INSTALL_PREFIX}/mscore.app/Contents/PlugIns/MuseScoreQLPreviewProvider.appex/Contents/Frameworks\")
+    file(MAKE_DIRECTORY \"${CMAKE_INSTALL_PREFIX}/mscore.app/Contents/PlugIns/MuseScoreThumbnailProvider.appex/Contents/MacOS\")
 
     # Copy Info.plist files
     file(COPY \"${CMAKE_CURRENT_SOURCE_DIR}/mscz-ql-plugin/Info.plist\"
          DESTINATION \"${CMAKE_INSTALL_PREFIX}/mscore.app/Contents/PlugIns/MuseScoreQLPreviewProvider.appex/Contents\")
+    file(COPY \"${CMAKE_CURRENT_SOURCE_DIR}/mscz-thumb-plugin/Info.plist\"
+         DESTINATION \"${CMAKE_INSTALL_PREFIX}/mscore.app/Contents/PlugIns/MuseScoreThumbnailProvider.appex/Contents\")
 
     # Copy executable to MacOS
     file(COPY \"${CMAKE_CURRENT_SOURCE_DIR}/.build/debug/MuseScoreQLPreviewProvider\"
          DESTINATION \"${CMAKE_INSTALL_PREFIX}/mscore.app/Contents/PlugIns/MuseScoreQLPreviewProvider.appex/Contents/MacOS\")
-
-    # Copy ZIPFoundation and other dependencies to Frameworks
-    file(GLOB ZIPFOUNDATION_LIBS \"${CMAKE_CURRENT_SOURCE_DIR}/.build/debug/libZIPFoundation*.dylib\")
-    file(COPY \${ZIPFOUNDATION_LIBS}
-         DESTINATION \"${CMAKE_INSTALL_PREFIX}/mscore.app/Contents/PlugIns/MuseScoreQLPreviewProvider.appex/Contents/Frameworks\")
+    file(COPY \"${CMAKE_CURRENT_SOURCE_DIR}/.build/debug/MuseScoreThumbnailProvider\"
+         DESTINATION \"${CMAKE_INSTALL_PREFIX}/mscore.app/Contents/PlugIns/MuseScoreThumbnailProvider.appex/Contents/MacOS\")
 
     # Ad-hoc code sign the QuickLook extension, for dev
     execute_process(
@@ -69,6 +68,16 @@ install(CODE "
     )
     if(NOT CODESIGN_RESULT EQUAL 0)
         message(FATAL_ERROR \"Failed to ad-hoc sign QuickLook extension\")
+    endif()
+
+    # Ad-hoc code sign the Thumbnail Provider extension, for dev
+    execute_process(
+        COMMAND codesign --force --sign - --timestamp=none --entitlements \"${CMAKE_CURRENT_SOURCE_DIR}/mscz-thumb-plugin/mscz_thumb_plugin.entitlements\"
+                \"${CMAKE_INSTALL_PREFIX}/mscore.app/Contents/PlugIns/MuseScoreThumbnailProvider.appex\"
+        RESULT_VARIABLE CODESIGN_RESULT
+    )
+    if(NOT CODESIGN_RESULT EQUAL 0)
+        message(FATAL_ERROR \"Failed to ad-hoc sign Thumbnail Provider extension\")
     endif()
 
     # Ad-hoc code sign the main app, for dev
