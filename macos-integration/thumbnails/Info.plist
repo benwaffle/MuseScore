@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleIdentifier</key>
-	<string>com.musescore.MuseScoreQLPreviewProvider</string>
+	<string>org.musescore.MuseScoreThumbnailProvider</string>
 	<key>CFBundleName</key>
-	<string>MuseScoreQLPreviewProvider</string>
+	<string>MuseScoreThumbnailProvider</string>
 	<key>CFBundleExecutable</key>
-	<string>MuseScoreQLPreviewProvider</string>
+	<string>MuseScoreThumbnailProvider</string>
 	<key>CFBundlePackageType</key>
 	<string>XPC!</string>
 	<key>CFBundleShortVersionString</key>
@@ -18,19 +18,17 @@
 	<dict>
 		<key>NSExtensionAttributes</key>
 		<dict>
-			<key>QLIsDataBasedPreview</key>
-			<true/>
 			<key>QLSupportedContentTypes</key>
 			<array>
 				<string>org.musescore.mscz</string>
 			</array>
-			<key>QLSupportsSearchableItems</key>
-			<false/>
+			<key>QLThumbnailMinimumDimension</key>
+			<integer>0</integer>
 		</dict>
 		<key>NSExtensionPointIdentifier</key>
-		<string>com.apple.quicklook.preview</string>
+		<string>com.apple.quicklook.thumbnail</string>
 		<key>NSExtensionPrincipalClass</key>
-		<string>MuseScoreQLPreviewProvider.PreviewProvider</string>
+		<string>MuseScoreThumbnailProvider.ThumbnailProvider</string>
 	</dict>
 </dict>
 </plist>

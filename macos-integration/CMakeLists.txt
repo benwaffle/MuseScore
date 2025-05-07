@@ -49,9 +49,9 @@ install(CODE "
     file(MAKE_DIRECTORY \"${CMAKE_INSTALL_PREFIX}/mscore.app/Contents/PlugIns/MuseScoreThumbnailProvider.appex/Contents/MacOS\")
 
     # Copy Info.plist files
-    file(COPY \"${CMAKE_CURRENT_SOURCE_DIR}/mscz-ql-plugin/Info.plist\"
+    file(COPY \"${CMAKE_CURRENT_SOURCE_DIR}/quicklook/Info.plist\"
          DESTINATION \"${CMAKE_INSTALL_PREFIX}/mscore.app/Contents/PlugIns/MuseScoreQLPreviewProvider.appex/Contents\")
-    file(COPY \"${CMAKE_CURRENT_SOURCE_DIR}/mscz-thumb-plugin/Info.plist\"
+    file(COPY \"${CMAKE_CURRENT_SOURCE_DIR}/thumbnails/Info.plist\"
          DESTINATION \"${CMAKE_INSTALL_PREFIX}/mscore.app/Contents/PlugIns/MuseScoreThumbnailProvider.appex/Contents\")
 
     # Copy executable to MacOS
@@ -62,7 +62,7 @@ install(CODE "
 
     # Ad-hoc code sign the QuickLook extension, for dev
     execute_process(
-        COMMAND codesign --force --sign - --timestamp=none --entitlements \"${CMAKE_CURRENT_SOURCE_DIR}/mscz-ql-plugin/mscz_ql_plugin.entitlements\"
+        COMMAND codesign --force --sign - --timestamp=none --entitlements \"${CMAKE_CURRENT_SOURCE_DIR}/quicklook/plugin.entitlements\"
                 \"${CMAKE_INSTALL_PREFIX}/mscore.app/Contents/PlugIns/MuseScoreQLPreviewProvider.appex\"
         RESULT_VARIABLE CODESIGN_RESULT
     )
@@ -72,7 +72,7 @@ install(CODE "
 
     # Ad-hoc code sign the Thumbnail Provider extension, for dev
     execute_process(
-        COMMAND codesign --force --sign - --timestamp=none --entitlements \"${CMAKE_CURRENT_SOURCE_DIR}/mscz-thumb-plugin/mscz_thumb_plugin.entitlements\"
+        COMMAND codesign --force --sign - --timestamp=none --entitlements \"${CMAKE_CURRENT_SOURCE_DIR}/thumbnails/plugin.entitlements\"
                 \"${CMAKE_INSTALL_PREFIX}/mscore.app/Contents/PlugIns/MuseScoreThumbnailProvider.appex\"
         RESULT_VARIABLE CODESIGN_RESULT
     )

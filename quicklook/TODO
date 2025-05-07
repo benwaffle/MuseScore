@@ -1,6 +1,0 @@
-- codesign in prod
-
-qlmanage -m is a lie
-pluginkit is where it's at
-
-sudo log stream --predicate 'process == "MuseScoreQLPreviewProvider"'

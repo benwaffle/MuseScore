@@ -23,7 +23,7 @@ let package = Package(
         .executableTarget(
             name: "MuseScoreQLPreviewProvider",
             dependencies: ["ZIPFoundation"],
-            path: "mscz-ql-plugin",
+            path: "quicklook",
             swiftSettings: [
                 .unsafeFlags(["-application-extension"])
             ],
@@ -34,7 +34,7 @@ let package = Package(
         .executableTarget(
             name: "MuseScoreThumbnailProvider",
             dependencies: ["ZIPFoundation"],
-            path: "mscz-thumb-plugin",
+            path: "thumbnails",
             swiftSettings: [
                 .unsafeFlags(["-application-extension"])
             ],
